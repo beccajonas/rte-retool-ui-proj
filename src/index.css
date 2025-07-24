@@ -1,0 +1,18 @@
+.editor-input {
+  height: 200px; /* Fixed height */
+  overflow-y: auto; /* Enable vertical scroll */
+  border: 2px solid #ccc;
+  padding: 10px;
+  font-size: 16px;
+  outline: none;
+  max-width: 700px;
+}
+
+.editor-placeholder {
+  position: absolute;
+  top: 33px;
+  left: 12px;
+  color: #aaa;
+  pointer-events: none;
+  font-size: 16px;
+}
