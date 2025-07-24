@@ -11,6 +11,7 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import ToolBarPlugin from "./Plugins/ToolbarPlugin";
 import type { EditorThemeClasses } from "lexical";
 import { css } from "@emotion/css";
+import { Box } from "@chakra-ui/react";
 
 interface RichTextEditorProps {}
 
@@ -44,11 +45,32 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
         <LexicalComposer initialConfig={initialConfig}>
           <ToolBarPlugin />
           <RichTextPlugin
-            contentEditable={<ContentEditable className="editor-input" />}
-            placeholder={<div className="editor-placeholder">Some text</div>}
+            contentEditable={<ContentEditable 
+              className={css({
+                height: 120,
+                fontSize: 12,
+                padding: 8,
+                overflow: "auto",
+                outline: "none",
+                border: "1px solid black",
+                borderRadius: "4px",
+              })}
+            />}
+            placeholder={
+              <Box
+                className={css({
+                  position: "absolute",
+                  color: "#999",
+                  top: 30,
+                  left: 10,
+                  fontSize: 12,
+                })}
+              >
+                Enter text...
+              </Box>
+            }
             ErrorBoundary={LexicalErrorBoundary}
           />
-
           <AutoFocusPlugin />
           <HistoryPlugin />
         </LexicalComposer>
