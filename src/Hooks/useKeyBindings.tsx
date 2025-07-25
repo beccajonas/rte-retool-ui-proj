@@ -24,7 +24,7 @@ export const useKeyBindings = ({
               if (event?.key === "Z" && event?.ctrlKey) {
                 onAction(RichTextAction.Undo);
               }
-              if (event?.key === "Y" && event?.ctrlKey) {
+              if (event?.key === "Z" && event?.ctrlKey && event?.shiftKey) {
                 onAction(RichTextAction.Redo);
               }
               return false;
