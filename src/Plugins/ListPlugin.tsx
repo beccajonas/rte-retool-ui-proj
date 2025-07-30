@@ -7,6 +7,7 @@ import {
   INSERT_UNORDERED_LIST_COMMAND,
   REMOVE_LIST_COMMAND,
 } from "@lexical/list";
+import { Divider } from "../Components/Divider";
 
 interface ListPluginProps {
   blockType: string;
@@ -46,6 +47,7 @@ export default function ListPlugin({
         }}
         {...getSelectedBtnProps(blockType === "ol")}
       />
+      <Divider />
       <IconButton
         icon={<ListUl />}
         aria-label="Add Unordered List"
