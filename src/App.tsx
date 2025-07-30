@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RichTextEditor } from "./RichTextEditor";
 import { ChakraProvider } from "@chakra-ui/react";
 import Form from "./Form";
 

@@ -1,5 +1,9 @@
 import { Box, ButtonGroup, Flex, IconButton, Select } from "@chakra-ui/react";
-import { LOW_PRIORIRTY, RICH_TEXT_OPTIONS, RichTextAction } from "../Constants/index";
+import {
+  LOW_PRIORIRTY,
+  RICH_TEXT_OPTIONS,
+  RichTextAction,
+} from "../Constants/index";
 import { Divider } from "../Components/Divider";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
@@ -14,8 +18,10 @@ import {
   $isRangeSelection,
 } from "lexical";
 import { useState, useEffect } from "react";
-import { mergeRegister } from "@lexical/utils";
+import { mergeRegister, $getNearestNodeOfType } from "@lexical/utils";
 import { css } from "@chakra-ui/react";
+import ListPlugin from "./ListPlugin";
+import { $isListNode, ListNode } from "@lexical/list";
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -26,33 +32,52 @@ export default function ToolbarPlugin() {
   const [selectionMap, setSelectionMap] = useState<{ [id: string]: boolean }>(
     {}
   );
-
-  
+  const [blockType, setBlockType] = useState("paragraph");
 
   const updateToolbar = () => {
     const selection = $getSelection();
-    
+
     if ($isRangeSelection(selection)) {
-        const newSelectionMap = {
-          [RichTextAction.Bold]: selection.hasFormat("bold"),
-          [RichTextAction.Italics]: selection.hasFormat("italic"),
-          [RichTextAction.Underline]: selection.hasFormat("underline"),
-          [RichTextAction.Strikethrough]: selection.hasFormat("strikethrough"),
-          [RichTextAction.Superscript]: selection.hasFormat("superscript"),
-          [RichTextAction.Subscript]: selection.hasFormat("subscript"),
-          [RichTextAction.Highlight]: selection.hasFormat("highlight"),
-          [RichTextAction.Code]: selection.hasFormat("code"),
-        }
-        setSelectionMap(newSelectionMap);
+      const newSelectionMap = {
+        [RichTextAction.Bold]: selection.hasFormat("bold"),
+        [RichTextAction.Italics]: selection.hasFormat("italic"),
+        [RichTextAction.Underline]: selection.hasFormat("underline"),
+        [RichTextAction.Strikethrough]: selection.hasFormat("strikethrough"),
+        [RichTextAction.Superscript]: selection.hasFormat("superscript"),
+        [RichTextAction.Subscript]: selection.hasFormat("subscript"),
+        [RichTextAction.Highlight]: selection.hasFormat("highlight"),
+        [RichTextAction.Code]: selection.hasFormat("code"),
+      };
+      setSelectionMap(newSelectionMap);
+
+      const anchorNode = selection.anchor.getNode();
+      const element =
+        anchorNode.getKey() === "root"
+          ? anchorNode
+          : anchorNode.getTopLevelElementOrThrow();
+      const elementKey = element.getKey();
+      const elementDOM = editor.getElementByKey(elementKey);
+
+      if (!elementDOM) return;
+
+      if ($isListNode(element)) {
+        const parentList = $getNearestNodeOfType(anchorNode, ListNode);
+        const type = parentList ? parentList.getTag() : element.getTag();
+        console.log("Setting block type to:", type);
+        setBlockType(type);
+        console.log("Block type set to:", blockType);
+      } else {
+        setBlockType("paragraph");
+      }
     }
-  }
+  };
 
   useEffect(() => {
     return mergeRegister(
-      editor.registerUpdateListener(({editorState}) => {
+      editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           updateToolbar();
-        })
+        });
       }),
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
@@ -155,17 +180,11 @@ export default function ToolbarPlugin() {
           variant: "solid",
         }
       : {};
-  
+
   return (
     <Box>
       <Flex gap={4}>
-      <ButtonGroup
-        size="xs"
-        isAttached
-        variant="ghost"
-        color="#444"
-  
-      >
+        <ButtonGroup size="xs" isAttached variant="ghost" color="#444">
           {RICH_TEXT_OPTIONS.map(({ id, label, icon, fontSize }) =>
             id === RichTextAction.Divider ? (
               <Divider />
@@ -182,6 +201,7 @@ export default function ToolbarPlugin() {
           )}
         </ButtonGroup>
       </Flex>
+      <ListPlugin blockType={blockType} setBlockType={setBlockType} />
     </Box>
   );
 }

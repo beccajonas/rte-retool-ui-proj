@@ -13,6 +13,8 @@ import type { EditorThemeClasses } from "lexical";
 import { css } from "@emotion/css";
 import { Box } from "@chakra-ui/react";
 import CustomOnChangePlugin from "./Plugins/CustomOnChangePlugin";
+import { ListNode, ListItemNode } from "@lexical/list";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 
 const theme: EditorThemeClasses = {
   text: {
@@ -44,7 +46,13 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
         namespace: name,
         theme,
         onError: () => {},
-        nodes: [HeadingNode, CodeHighlightNode, CodeNode],
+        nodes: [
+          HeadingNode,
+          CodeHighlightNode,
+          CodeNode,
+          ListNode,
+          ListItemNode,
+        ],
       }),
       [name]
     );
@@ -59,7 +67,10 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
                 className={css({
                   height: 120,
                   fontSize: 12,
-                  padding: 8,
+                  paddingTop: 12, // ⬅️ Top padding
+                  paddingLeft: 12, // ⬅️ Left padding
+                  paddingRight: 8,
+                  paddingBottom: 8,
                   overflow: "auto",
                   outline: "none",
                   border: "1px solid black",
@@ -71,6 +82,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
               <Box
                 className={css({
                   position: "absolute",
+                  paddingTop: 30, // ⬅️ Top padding
+                  paddingRight: 8,
+                  paddingBottom: 8,
                   color: "#999",
                   top: 30,
                   left: 10,
@@ -84,6 +98,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
           />
           <AutoFocusPlugin />
           <HistoryPlugin />
+          <ListPlugin />
           <CustomOnChangePlugin value={value} onChange={onChange} />
         </LexicalComposer>
       </div>
