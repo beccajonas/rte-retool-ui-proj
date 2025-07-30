@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import "./index.css";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { HeadingNode } from "@lexical/rich-text";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
@@ -9,26 +8,12 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import ToolBarPlugin from "./Plugins/ToolbarPlugin";
-import type { EditorThemeClasses } from "lexical";
 import { css } from "@emotion/css";
 import { Box } from "@chakra-ui/react";
 import CustomOnChangePlugin from "./Plugins/CustomOnChangePlugin";
-
-const theme: EditorThemeClasses = {
-  text: {
-    bold: css({ fontWeight: "bold" }),
-    underline: css({ textDecoration: "underline" }),
-    strikethrough: css({ textDecoration: "line-through" }),
-    underlineStrikethrough: css({ textDecoration: "underline line-through" }),
-    italic: css({ fontStyle: "italic" }),
-    code: css({
-      color: "black",
-      padding: 2,
-      background: "#eee",
-      border: "1px solid #ccc",
-    }),
-  },
-};
+import { ListNode, ListItemNode } from "@lexical/list";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { theme } from "./theme";
 
 interface RichTextEditorProps {
   value: string;
@@ -44,7 +29,13 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
         namespace: name,
         theme,
         onError: () => {},
-        nodes: [HeadingNode, CodeHighlightNode, CodeNode],
+        nodes: [
+          HeadingNode,
+          CodeHighlightNode,
+          CodeNode,
+          ListNode,
+          ListItemNode,
+        ],
       }),
       [name]
     );
@@ -53,37 +44,47 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
       <div className="editor-container">
         <LexicalComposer initialConfig={initialConfig}>
           <ToolBarPlugin />
-          <RichTextPlugin
-            contentEditable={
-              <ContentEditable
-                className={css({
-                  height: 120,
-                  fontSize: 12,
-                  padding: 8,
-                  overflow: "auto",
-                  outline: "none",
-                  border: "1px solid black",
-                  borderRadius: "4px",
-                })}
-              />
-            }
-            placeholder={
-              <Box
-                className={css({
-                  position: "absolute",
-                  color: "#999",
-                  top: 30,
-                  left: 10,
-                  fontSize: 12,
-                })}
-              >
-                {placeholder}
-              </Box>
-            }
-            ErrorBoundary={LexicalErrorBoundary}
-          />
+          <div
+            className={css({
+              position: "relative",
+              height: "150px",
+              border: "1px solid black",
+              borderRadius: "4px",
+              overflow: "hidden",
+            })}
+          >
+            <RichTextPlugin
+              contentEditable={
+                <ContentEditable
+                  className={css({
+                    height: "100%",
+                    fontSize: 12,
+                    padding: 8,
+                    overflowY: "auto",
+                    outline: "none",
+                  })}
+                />
+              }
+              placeholder={
+                <Box
+                  className={css({
+                    position: "absolute",
+                    pointerEvents: "none",
+                    color: "#999",
+                    top: 8,
+                    left: 8,
+                    fontSize: 12,
+                  })}
+                >
+                  {placeholder}
+                </Box>
+              }
+              ErrorBoundary={LexicalErrorBoundary}
+            />
+          </div>
           <AutoFocusPlugin />
           <HistoryPlugin />
+          <ListPlugin />
           <CustomOnChangePlugin value={value} onChange={onChange} />
         </LexicalComposer>
       </div>

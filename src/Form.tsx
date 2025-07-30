@@ -8,14 +8,13 @@ export default function Form() {
   console.log(value);
 
   return (
-    <Box>
+    <Box p={2}>
       <RichTextEditor
-        placeholder="Select Post"
-        name="post"
+        placeholder="Type here"
+        name="text"
         value={value}
         onChange={(newValue) => setValue(newValue)}
       />
-
       <Button colorScheme="blue" size="xs" mt="2">
         Save
       </Button>
