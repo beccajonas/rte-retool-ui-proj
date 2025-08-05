@@ -23,6 +23,7 @@ import { css } from "@chakra-ui/react";
 import ListPlugin from "./ListPlugin";
 import { $isListNode, ListNode } from "@lexical/list";
 import CodeBlockPlugin from "./CodeBlockPlugin";
+import ImagePlugin from "./ImagePlugin";
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -202,8 +203,10 @@ export default function ToolbarPlugin() {
           )}
         </ButtonGroup>
       </Flex>
-      <ButtonGroup size="xs" isAttached variant="ghost" color="#444">
+      <ButtonGroup isAttached variant="ghost" color="#444">
         <ListPlugin blockType={blockType} setBlockType={setBlockType} />
+        <Divider />
+        <ImagePlugin />
         <Divider />
         <CodeBlockPlugin />
       </ButtonGroup>

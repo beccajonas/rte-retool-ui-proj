@@ -14,6 +14,7 @@ import CustomOnChangePlugin from "./Plugins/CustomOnChangePlugin";
 import { ListNode, ListItemNode } from "@lexical/list";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { theme } from "./theme";
+import { ImageNode } from "./nodes/ImageNode";
 
 interface RichTextEditorProps {
   value: string;
@@ -35,6 +36,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
           CodeNode,
           ListNode,
           ListItemNode,
+          ImageNode,
         ],
       }),
       [name]
