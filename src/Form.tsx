@@ -15,9 +15,6 @@ export default function Form() {
         value={value}
         onChange={(newValue) => setValue(newValue)}
       />
-      <Button colorScheme="blue" size="xs" mt="2">
-        Save
-      </Button>
     </Box>
   );
 }

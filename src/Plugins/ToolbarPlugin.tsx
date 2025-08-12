@@ -24,6 +24,7 @@ import ListPlugin from "./ListPlugin";
 import { $isListNode, ListNode } from "@lexical/list";
 import CodeBlockPlugin from "./CodeBlockPlugin";
 import ImagePlugin from "./ImagePlugin";
+import LinkPlugin from "./LinkPlugin";
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -209,6 +210,8 @@ export default function ToolbarPlugin() {
         <ImagePlugin />
         <Divider />
         <CodeBlockPlugin />
+        <Divider />
+        <LinkPlugin />
       </ButtonGroup>
     </Box>
   );
