@@ -15,6 +15,7 @@ import { ListNode, ListItemNode } from "@lexical/list";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { theme } from "./theme";
 import { ImageNode } from "./nodes/ImageNode";
+import SaveHtmlPlugin from "./Plugins/SaveHTMLPlugin";
 
 interface RichTextEditorProps {
   value: string;
@@ -88,6 +89,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
           <HistoryPlugin />
           <ListPlugin />
           <CustomOnChangePlugin value={value} onChange={onChange} />
+          <SaveHtmlPlugin />
         </LexicalComposer>
       </div>
     );
